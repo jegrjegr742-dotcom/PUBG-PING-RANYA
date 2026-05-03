@@ -3,85 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PUBG PING RANYA</title>
+    <title>PUBG PING RANYA | REAL-TIME</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            background-color: #000; 
+            background-color: #0a0a0a; 
             color: #fff; 
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             display: flex; 
             justify-content: center; 
             align-items: center; 
             height: 100vh;
         }
-        .main-card {
-            width: 90%;
-            max-width: 380px;
-            background: linear-gradient(145deg, #0f0f0f, #1a1a1a);
-            border: 2px solid #f39c12; /* ڕەنگی زەردی پۆبجی */
-            border-radius: 20px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 0 25px rgba(243, 156, 18, 0.2);
-        }
-        h1 { 
-            color: #f39c12; 
-            font-size: 26px; 
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
-        }
-        .location { color: #888; font-size: 14px; margin-bottom: 25px; }
-        .ping-display {
-            background: #111;
+        .card {
+            width: 350px;
+            background: #151515;
+            border: 2px solid #f39c12;
+            border-radius: 25px;
             padding: 30px;
-            border-radius: 100%;
-            width: 180px;
-            height: 180px;
-            margin: 0 auto 25px;
-            border: 4px double #00ff41;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(243, 156, 18, 0.2);
+        }
+        h2 { color: #f39c12; margin-bottom: 5px; font-size: 22px; }
+        .location { color: #666; font-size: 12px; margin-bottom: 25px; }
+        .ping-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid #222;
+            margin: 0 auto 20px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            transition: 0.3s;
         }
-        .num { font-size: 55px; font-weight: bold; color: #00ff41; }
-        .ms { font-size: 16px; color: #555; }
+        #ping-value { font-size: 45px; font-weight: bold; color: #00ff41; }
+        .ms-label { font-size: 14px; color: #555; }
+        .status-bar { font-size: 14px; margin-top: 15px; color: #f39c12; }
         .btn {
             background: #f39c12;
             color: #000;
             border: none;
-            padding: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
+            padding: 12px;
             width: 100%;
-            transition: 0.3s;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
         }
-        .btn:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
 
-    <div class="main-card">
-        <h1>PUBG PING RANYA</h1>
-        <div class="location">SERVER: RANYA - KURDISTAN</div>
+    <div class="card">
+        <h2>PUBG PING RANYA</h2>
+        <div class="location">REAL-TIME NETWORK MONITOR</div>
         
-        <div class="ping-display">
-            <span class="num">20</span>
-            <span class="ms">MS</span>
+        <div class="ping-circle" id="circle">
+            <span id="ping-value">--</span>
+            <span class="ms-label">MS</span>
         </div>
 
-        <button class="btn" onclick="boost()">ACTIVATE BOOSTER</button>
-        <p id="msg" style="margin-top: 15px; color: #00ff41; font-size: 13px; display: none;">Optimization Complete! ✅</p>
+        <div id="status" class="status-bar">لەکاتی پشکنیندایە...</div>
+        <button class="btn" onclick="checkPing()">پشکنینەوەی خێرا</button>
     </div>
 
     <script>
-        function boost() {
-            document.getElementById('msg').style.display = "block";
-            alert("پینگ لەسەر ٢٠ جێگیر کرا بۆ شاری ڕانیە 🚀");
+        function checkPing() {
+            const pingText = document.getElementById('ping-value');
+            const circle = document.getElementById('circle');
+            const status = document.getElementById('status');
+            
+            const start = new Date().getTime();
+            
+            // ئەم بەشە بەڕاستی داواکاری دەنێرێت بۆ گوگل بۆ پێوانەی پینگ
+            fetch("https://www.google.com/favicon.ico", { mode: 'no-cors', cache: 'no-cache' })
+            .then(() => {
+                const end = new Date().getTime();
+                const ping = end - start;
+                
+                pingText.innerText = ping;
+                
+                // گۆڕینی ڕەنگ بەپێی پینگەکە
+                if (ping < 60) {
+                    pingText.style.color = "#00ff41";
+                    circle.style.borderColor = "#00ff41";
+                    status.innerText = "هێڵەکە زۆر باشە بۆ یاریکردن ✅";
+                } else if (ping < 120) {
+                    pingText.style.color = "#f1c40f";
+                    circle.style.borderColor = "#f1c40f";
+                    status.innerText = "هێڵەکە ئاساییە ⚠️";
+                } else {
+                    pingText.style.color = "#e74c3c";
+                    circle.style.borderColor = "#e74c3c";
+                    status.innerText = "پینگ بەرزە، ئاگاداربە! ❌";
+                }
+            })
+            .catch(() => {
+                status.innerText = "کێشە لە پەیوەندی هەیە!";
+            });
         }
+
+        // هەر ٣ چرکە جارێک بە ئۆتۆماتیکی پینگ بپشکنە
+        setInterval(checkPing, 3000);
+        checkPing();
     </script>
 
 </body>
